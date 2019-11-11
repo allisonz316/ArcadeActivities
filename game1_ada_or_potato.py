@@ -8,7 +8,7 @@ BACKGROUND_COLOR = arcade.color.BLACK
 GAME_TITLE = "Ada or Potato"
 GAME_SPEED = 1/60
 
-TIMER_MAXIMUM = 100
+TIMER_MAXIMUM = 50
 
 
 NEXT_PHASE = {
@@ -27,6 +27,7 @@ class Ada(arcade.Sprite):
         self.timer = 0
         self.center_x = WINDOW_WIDTH/2
         self.center_y = WINDOW_HEIGHT/2
+        self.points = 0
 
     def update_timer(self):
         if self.timer < TIMER_MAXIMUM:
@@ -98,9 +99,19 @@ class AdaOrPotatoGame(arcade.Window):
         """ Called when it is time to draw the world """
         arcade.start_render()
         self.pic_list.draw()
+        start_y = 20
+        start_x = 50
+        arcade.draw_text(f"Points: {self.points}",
+                         start_x, start_y, arcade.color.WHITE, 14)
 
     def on_update(self, delta_time):
         self.pic_list.update()
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        if self.phase == "ada":
+            self.points += 1
+        elif self.phase == "potato":
+            self.points -= 5
 
 
 def main():
