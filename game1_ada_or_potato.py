@@ -11,7 +11,7 @@ GAME_SPEED = 1/60
 TIMER_MAXIMUM = 50
 
 IMAGE_ADA = arcade.load_texture("images/ada.png")
-IMAGE_POTATO = arcade.load_texture("images/potato.png", 1180, 872.5, 281, 444)
+IMAGE_POTATO = arcade.load_texture("images/potato.png", scale=.15)
 
 
 class AdaOrPotato(arcade.Sprite):
@@ -23,10 +23,7 @@ class AdaOrPotato(arcade.Sprite):
         self.timer = 0
         self.center_x = WINDOW_WIDTH/2
         self.center_y = WINDOW_HEIGHT/2
-        self.width = 281
-        self.height = 444
         self.texture = IMAGE_ADA
-        self.points = 0
 
     def update_timer(self):
         if self.timer < TIMER_MAXIMUM:
@@ -51,6 +48,7 @@ class AdaOrPotatoGame(arcade.Window):
     def __init__(self):
         super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, GAME_TITLE)
         self.pic_list = None
+        self.points = 0
 
     def setup(self):
         arcade.set_background_color(BACKGROUND_COLOR)
@@ -69,10 +67,11 @@ class AdaOrPotatoGame(arcade.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         for pic in self.pic_list:
-            if pic.texture == IMAGE_ADA:
-                self.points = self.points + 1
-            elif pic.texture == IMAGE_POTATO:
-                self.points = self.points - 2
+            if pic.collides_with_point([x, y]):
+                if pic.texture == IMAGE_ADA:
+                    self.points = self.points + 1
+                elif pic.texture == IMAGE_POTATO:
+                    self.points = self.points - 2
 
 
 def main():
