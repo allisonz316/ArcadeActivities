@@ -10,23 +10,22 @@ GAME_SPEED = 1/60
 
 TIMER_MAXIMUM = 50
 
-
-NEXT_PHASE = {
-    'ada': 'potato',
-    'potato': 'ada',
-    }
+IMAGE_ADA = arcade.load_texture("images/ada.png")
+IMAGE_POTATO = arcade.load_texture("images/potato.png", 281, 444, 444, 444)
 
 
-class Ada(arcade.Sprite):
-    phase: str
+class AdaOrPotato(arcade.Sprite):
     timer: int
 
     def __init__(self):
-        super().__init__("images/ada.png")
+        super().__init__()
         self.phase = 'ada'
         self.timer = 0
         self.center_x = WINDOW_WIDTH/2
         self.center_y = WINDOW_HEIGHT/2
+        self.width = 281
+        self.height = 444
+        self.texture = IMAGE_ADA
         self.points = 0
 
     def update_timer(self):
@@ -34,52 +33,16 @@ class Ada(arcade.Sprite):
             self.timer += 1
         else:
             self.timer = 0
-            self.phase = NEXT_PHASE[self.phase]
+            self.switch_image()
 
-    def hide(self):
-        if self.phase == "potato":
-            self.center_x = 1000
-            self.center_y = 1000
-        elif self.phase == "ada":
-            self.center_x = WINDOW_WIDTH / 2
-            self.center_y = WINDOW_HEIGHT / 2
-
-    def update(self):
-        self.update_timer()
-        self.hide()
-
-
-class Potato(arcade.Sprite):
-    phase: str
-    timer: int
-
-    def __init__(self):
-        super().__init__("images/potato.png")
-        self.phase = 'ada'
-        self.timer = 0
-        self.center_x = 1000
-        self.center_y = 1000
-        self.height = 500
-        self.width = 300
-
-    def update_timer(self):
-        if self.timer < TIMER_MAXIMUM:
-            self.timer += 1
+    def switch_image(self):
+        if self.texture == IMAGE_ADA:
+            self.texture = IMAGE_POTATO
         else:
-            self.timer = 0
-            self.phase = NEXT_PHASE[self.phase]
-
-    def hide(self):
-        if self.phase == "potato":
-            self.center_x = WINDOW_WIDTH / 2
-            self.center_y = WINDOW_HEIGHT / 2
-        elif self.phase == "ada":
-            self.center_x = 1000
-            self.center_y = 1000
+            self.texture = IMAGE_ADA
 
     def update(self):
         self.update_timer()
-        self.hide()
 
 
 class AdaOrPotatoGame(arcade.Window):
@@ -92,8 +55,7 @@ class AdaOrPotatoGame(arcade.Window):
     def setup(self):
         arcade.set_background_color(BACKGROUND_COLOR)
         self.pic_list = arcade.SpriteList()
-        self.pic_list.append(Ada())
-        self.pic_list.append(Potato())
+        self.pic_list.append(AdaOrPotato())
 
     def on_draw(self):
         """ Called when it is time to draw the world """
@@ -107,9 +69,9 @@ class AdaOrPotatoGame(arcade.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         for pic in self.pic_list:
-            if pic.phase == "ada":
+            if pic.texture == IMAGE_ADA:
                 self.points = self.points + 1
-            elif pic.phase == "potato":
+            elif pic.texture == IMAGE_POTATO:
                 self.points = self.points - 2
 
 
