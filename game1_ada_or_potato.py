@@ -11,7 +11,7 @@ GAME_SPEED = 1/60
 TIMER_MAXIMUM = 50
 
 IMAGE_ADA = arcade.load_texture("images/ada.png")
-IMAGE_POTATO = arcade.load_texture("images/potato.png", 281, 444, 444, 444)
+IMAGE_POTATO = arcade.load_texture("images/potato.png", 1180, 872.5, 281, 444)
 
 
 class AdaOrPotato(arcade.Sprite):
