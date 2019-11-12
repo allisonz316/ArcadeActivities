@@ -99,19 +99,18 @@ class AdaOrPotatoGame(arcade.Window):
         """ Called when it is time to draw the world """
         arcade.start_render()
         self.pic_list.draw()
-        start_y = 20
-        start_x = 50
-        arcade.draw_text(f"Points: {self.points}",
-                         start_x, start_y, arcade.color.WHITE, 14)
+        arcade.draw_text(f"Points: {self.points}", 20, 50, arcade.color.WHITE, 14)
 
     def on_update(self, delta_time):
         self.pic_list.update()
+        arcade.draw_text(f"Points: {self.points}", 20, 50, arcade.color.WHITE, 14)
 
     def on_mouse_press(self, x, y, button, modifiers):
-        if self.phase == "ada":
-            self.points += 1
-        elif self.phase == "potato":
-            self.points -= 5
+        for pic in self.pic_list:
+            if pic.phase == "ada":
+                self.points = self.points + 1
+            elif pic.phase == "potato":
+                self.points = self.points - 2
 
 
 def main():
